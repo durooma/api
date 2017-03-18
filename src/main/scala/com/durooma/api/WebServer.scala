@@ -5,8 +5,6 @@ import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import com.durooma.api.route.Api
 
-import scala.io.StdIn
-
 /**
   * Created by hannes on 18/03/2017.
   */
@@ -18,17 +16,9 @@ object WebServer {
     implicit val materializer = ActorMaterializer();
     implicit val executionContext = system.dispatcher;
 
-    val api = new Api;
+    Http().bindAndHandle(Api.route, "localhost", 8080)
 
-    val bindingFuture = Http().bindAndHandle(api.route, "localhost", 8080)
-
-    println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
-    StdIn.readLine()
-    bindingFuture
-      .flatMap(_.unbind())
-      .onComplete(_ => {
-        system.terminate()
-      })
+    println(s"Server online at http://localhost:8080/")
 
   }
 
