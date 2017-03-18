@@ -9,6 +9,6 @@ import spray.json.DefaultJsonProtocol
   * Created by hannes on 18/03/2017.
   */
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit val accountFormat = jsonFormat3(AccountRow.apply)
+  implicit val accountFormat = jsonFormat4(AccountRow.apply)
   implicit val transactionFormat = jsonFormat4(Transaction.apply)
 }
