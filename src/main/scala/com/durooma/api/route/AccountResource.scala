@@ -5,10 +5,17 @@ import com.durooma.api.model.Account
 
 object AccountResource extends Directives with JsonSupport {
 
-  val route = path("account") {
-    get {
-      complete(Account.all)
-    }
+  val route = pathPrefix("account") {
+    pathEnd {
+      get {
+        complete(Account.all)
+      }
+    } ~
+      path(LongNumber) { id =>
+        get {
+          complete(Account.get(id))
+        }
+      }
   }
 
 }

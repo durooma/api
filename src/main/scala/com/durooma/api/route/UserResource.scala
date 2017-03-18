@@ -5,10 +5,17 @@ import com.durooma.api.model.User
 
 object UserResource extends Directives with JsonSupport {
 
-  val route = path("user") {
-    get {
-      complete(User.all)
-    }
+  val route = pathPrefix("user") {
+    pathEnd {
+      get {
+        complete(User.all)
+      }
+    } ~
+      path(LongNumber) { id =>
+        get {
+          complete(User.get(id))
+        }
+      }
   }
 
 }

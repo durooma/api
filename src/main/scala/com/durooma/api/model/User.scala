@@ -13,9 +13,14 @@ case class User(
 
 object User {
 
-  def all() = {
-    db.run(Tables.User.map(u => (u.id, u.email, u.firstName, u.lastName)).result)
-      .map(_.map((User.apply _).tupled(_)))
+  val fromTuple = (User.apply _).tupled(_)
+
+  def run(q: Query[Tables.User, Tables.User#TableElementType, Seq]) = {
+    db.run(q.map(u => (u.id, u.email, u.firstName, u.lastName)).result).map(_.map(fromTuple))
   }
+
+  def all() = run(Tables.User)
+
+  def get(id: Long) = run(Tables.User.filter(_.id === id)).map(_.head)
 
 }
