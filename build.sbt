@@ -17,11 +17,11 @@ libraryDependencies ++= Seq(
 
 slick <<= slickCodeGenTask // register manual sbt command
 
-//sourceGenerators in Compile <+= slickCodeGenTask // register automatic code generation on every compile, remove for only manual use
+sourceGenerators in Compile <+= slickCodeGenTask // register automatic code generation on every compile, remove for only manual use
 
 lazy val slick = TaskKey[Seq[File]]("gen-tables")
 lazy val slickCodeGenTask = (sourceManaged, dependencyClasspath in Compile, unmanagedResources in Compile, runner in Compile, streams) map { (dir, cp, res, r, s) =>
-  val outputDir = (dir / "slick").getPath
+  val outputDir = (dir / "main").getPath
   toError(r.run("slick.codegen.SourceCodeGenerator", cp.files ++ res, Array("#data", outputDir), s.log))
   val fname = outputDir + "/com/durooma/db/Tables.scala"
   Seq(file(fname))
