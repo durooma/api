@@ -1,6 +1,14 @@
 package com.durooma.api.model
 
-/**
-  * Created by hannes on 18/03/2017.
-  */
-case class Account(name: String, initialBalance: Double)
+import com.durooma.db.Tables.profile.api._
+import com.durooma.db.Tables
+
+import scala.concurrent.ExecutionContext
+
+object Account {
+
+  def all(implicit db: Database, executionContext: ExecutionContext) = {
+    db.run(Tables.Account.result)
+  }
+
+}
