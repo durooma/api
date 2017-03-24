@@ -53,7 +53,7 @@ object Session {
   }
 
   def logout(implicit session: Session) = {
-    db.run(Tables.Session.filter(_.token === session.token).delete).map(_ => "")
+    db.run(Tables.Session.filter(_.token === session.token).delete)
   }
 
   def get(token: String) = {

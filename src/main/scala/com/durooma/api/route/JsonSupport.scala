@@ -1,7 +1,7 @@
 package com.durooma.api.route
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import com.durooma.api.model.{CustomCredentials, Session, Transaction, User}
+import com.durooma.api.model._
 import com.durooma.db.Tables.AccountRow
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormatter, ISODateTimeFormat}
@@ -25,6 +25,7 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   }
 
   implicit val userFormat = jsonFormat5(User.apply)
+  implicit val userRegistrationFormat = jsonFormat5(UserRegistration.apply)
   implicit val accountFormat = jsonFormat4(AccountRow.apply)
   implicit val transactionFormat = jsonFormat4(Transaction.apply)
   implicit val sessionFormat = jsonFormat3(Session.apply)

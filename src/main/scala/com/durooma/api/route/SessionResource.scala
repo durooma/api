@@ -1,5 +1,7 @@
 package com.durooma.api.route
 
+import akka.http.scaladsl.model.StatusCodes
+import com.durooma.api.route.RouteSystem._
 import com.durooma.api.model.{CustomCredentials, Session}
 
 object SessionResource extends CustomDirectives with JsonSupport {
@@ -13,7 +15,7 @@ object SessionResource extends CustomDirectives with JsonSupport {
       } ~
       delete {
         authenticateToken { implicit session =>
-          complete(Session.logout)
+          complete(Session.logout.map(_ => StatusCodes.NoContent))
         }
       }
     }
