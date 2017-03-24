@@ -23,9 +23,9 @@ lazy val db = (project in file("db"))
     ),
     slick <<= slickCodeGenTask, // register manual sbt command
     sourceGenerators in Compile <+= slickCodeGenTask, // register automatic code generation on every compile, remove for only manual use
-    flywayUrl := "jdbc:mysql://localhost/durooma", // TODO: remove this redundancy
+    flywayUrl := "jdbc:mysql://localhost/durooma?useSSL=false", // TODO: remove this redundancy
     flywayLocations := Seq("db/migration"),
-    flywayUser := "root"
+    flywayUser := "durooma"
   ))
 
 lazy val api = (project in file("."))

@@ -12,9 +12,9 @@ object WebServer {
 
   def main(args: Array[String]): Unit = {
 
-    implicit val system = ActorSystem("requests");
-    implicit val materializer = ActorMaterializer();
-    implicit val executionContext = system.dispatcher;
+    implicit val system = ActorSystem("requests")
+    implicit val materializer = ActorMaterializer()
+    implicit val executionContext = system.dispatcher
 
     Http().bindAndHandle(Api.route, "localhost", 8080)
 
