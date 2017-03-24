@@ -6,8 +6,8 @@ import DB._
 
 object Account {
 
-  def all() = {
-    db.run(Tables.Account.result)
+  def all(implicit session: Session) = {
+    db.run(Tables.Account.filter(_.owner === session.user.id).result)
   }
 
   def get(id: Long) = {

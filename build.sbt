@@ -41,7 +41,9 @@ lazy val api = (project in file("."))
       "org.slf4j" % "slf4j-nop" % "1.6.4",
       "com.typesafe.slick" %% "slick-hikaricp" % "3.2.0",
       "com.typesafe" % "config" % "1.3.1",
-      "mysql" % "mysql-connector-java" % "5.1.41"
+      "mysql" % "mysql-connector-java" % "5.1.41",
+      "com.github.nscala-time" %% "nscala-time" % "2.16.0",
+      "com.github.t3hnar" %% "scala-bcrypt" % "3.0"
     )
   ))
   .dependsOn(db)
