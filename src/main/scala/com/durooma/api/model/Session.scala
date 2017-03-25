@@ -29,26 +29,25 @@ object Session {
 
   def generateToken() = {
     secureRandom.nextBytes(tokenBuffer)
-    Base64.getEncoder().encodeToString(tokenBuffer)
+    Base64.getEncoder.encodeToString(tokenBuffer)
   }
 
-  def createSession(id: Long) = Tables.SessionRow(0, id, generateToken(), new Timestamp((DateTime.now + expirationPeriod).getMillis()))
+  def createSession(id: Long) = Tables.SessionRow(0, id, generateToken(), new Timestamp((DateTime.now + expirationPeriod).getMillis))
 
   def login(credentials: CustomCredentials): Future[Session] = {
     db.run(Tables.User.filter(_.email === credentials.email).result).map(users => users.headOption).flatMap {
       case None => Future.failed(AuthenticationError("Invalid email or password.")) // unknown email
-      case Some(user) => {
+      case Some(user) =>
         try {
           if (credentials.password.isBcrypted(user.password.get)) {
             val session = createSession(user.id)
-            db.run(Tables.Session += session).map { _ => Session(session.token, user, new DateTime(session.expiresAt)) }
+            db.run(Tables.Session += session).map { _ => Session(session.token, User.fromRow(user), new DateTime(session.expiresAt)) }
           } else {
             Future.failed(AuthenticationError("Invalid email or password.")) // invalid password
           }
         } catch {
           case _ : Throwable => Future.failed(AuthenticationError("Invalid email or password.")) // invalid password
         }
-      }
     }
   }
 
@@ -61,7 +60,7 @@ object Session {
       (Tables.Session join Tables.User on (_.userId === _.id)).filter(_._1.token === token).result)
       .map(_.headOption)
       .map(_.map { case (sessionRow, userRow) =>
-        Session(sessionRow.token, userRow, new DateTime(sessionRow.expiresAt))
+        Session(sessionRow.token, User.fromRow(userRow), new DateTime(sessionRow.expiresAt))
       })
   }
 

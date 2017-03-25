@@ -14,19 +14,20 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 
   implicit object DateJsonFormat extends RootJsonFormat[DateTime] {
 
-    private val parserISO : DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis();
+    private val parserISO : DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis()
 
     override def write(obj: DateTime) = JsString(parserISO.print(obj))
 
     override def read(json: JsValue) : DateTime = json match {
       case JsString(s) => parserISO.parseDateTime(s)
-      case _ => throw new DeserializationException("Invalid date format: " + json)
+      case _ => throw DeserializationException("Invalid date format: " + json)
     }
   }
 
   implicit val userFormat = jsonFormat5(User.apply)
   implicit val userRegistrationFormat = jsonFormat5(UserRegistration.apply)
-  implicit val accountFormat = jsonFormat4(AccountRow.apply)
+  implicit val accountFormat = jsonFormat3(Account.apply)
+  implicit val accounBodyFormat = jsonFormat2(AccountBody.apply)
   implicit val transactionFormat = jsonFormat4(Transaction.apply)
   implicit val sessionFormat = jsonFormat3(Session.apply)
   implicit val credentialsFormat = jsonFormat2(CustomCredentials.apply)

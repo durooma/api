@@ -25,7 +25,7 @@ object User {
 
   val fromTuple = (User.apply _).tupled(_)
 
-  implicit def row2obj(u: Tables.UserRow): User = apply(u.id, u.email, u.login, u.firstName, u.lastName)
+  def fromRow(u: Tables.UserRow) = User(u.id, u.email, u.login, u.firstName, u.lastName)
 
   def run(q: Query[Tables.User, Tables.User#TableElementType, Seq]) = {
     db.run(q.map(u => (u.id, u.email, u.login, u.firstName, u.lastName)).result).map(_.map(fromTuple))
@@ -37,7 +37,7 @@ object User {
 
   def getByEmail(email: String) = run(Tables.User.filter(_.email === email)).map(_.headOption)
 
-  def add(u: UserRegistration) = {
+  def create(u: UserRegistration) = {
     db.run(Tables.User += Tables.UserRow(0, u.firstName, u.lastName, u.email, u.login, Some(u.password.bcrypt)))
   }
 

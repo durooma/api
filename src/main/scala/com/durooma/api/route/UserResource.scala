@@ -10,7 +10,7 @@ object UserResource extends CustomDirectives with JsonSupport {
     pathEnd {
       post {
         entity(as[UserRegistration]) { user =>
-          complete(User.add(user).map(_ => StatusCodes.Created))
+          complete(User.create(user).map(_ => StatusCodes.Created))
         }
       }
     } ~
