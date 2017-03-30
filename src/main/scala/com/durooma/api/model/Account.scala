@@ -4,8 +4,8 @@ import com.durooma.db.Tables.profile.api._
 import com.durooma.db.Tables
 import DB._
 
-case class Account(id: Long, name: String, initialBalance: Double)
-case class AccountBody(name: String, initialBalance: Option[Double]) {
+case class Account(id: Long, name: String, initialBalance: BigDecimal)
+case class AccountBody(name: String, initialBalance: Option[BigDecimal]) {
 
   def row(id: Long = 0)(implicit session: Session) = Tables.AccountRow(id, session.user.id, name, initialBalance.getOrElse(0.0))
 
