@@ -21,7 +21,10 @@ object Api extends CustomDirectives with JsonSupport {
   }
 
   val route = handleExceptions(genericExceptionHandler) {
-    AccountResource.route ~ UserResource.route ~ SessionResource.route
+    AccountResource.route ~
+    TransactionResource.route ~
+    UserResource.route ~
+    SessionResource.route
   }
 
 }
