@@ -18,7 +18,7 @@ object Transaction {
 
   val fromTuple = (Transaction.apply _).tupled(_)
 
-  def map(q: Query[Tables.Transaction, Tables.Transaction#TableElementType, Seq]) = q.map(t => (t.id, t.source, t.target, t.amount, t.huquqAmount))
+  def map(q: Query[Tables.Transaction, Tables.Transaction#TableElementType, Seq]) = q.map(t => (t.id, t.source, t.target, t.amount, t.exempt))
 
   def run(q: Query[Tables.Transaction, Tables.Transaction#TableElementType, Seq]) = {
     db.run(map(q).result).map(_.map(fromTuple))
@@ -51,7 +51,7 @@ object Transaction {
   }
 
   def create(transaction: TransactionBody)(implicit session: Session) = {
-    db.run((Tables.Transaction returning Tables.Transaction.map(_.id) into { (t, id) => Transaction(id, t.source, t.target, t.amount, t.huquqAmount) }) += transaction.row())
+    db.run((Tables.Transaction returning Tables.Transaction.map(_.id) into { (t, id) => Transaction(id, t.source, t.target, t.amount, t.exempt) }) += transaction.row())
   }
 
   def update(id: Long, transaction: TransactionBody)(implicit session: Session) = {
