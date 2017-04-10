@@ -7,10 +7,10 @@ import DB._
 /**
   * Created by hannes on 18/03/2017.
   */
-case class Transaction(id: Long, source: Option[Long], target: Option[Long], amount: BigDecimal, huquqAmount: BigDecimal)
-case class TransactionBody(source: Option[Long], target: Option[Long], amount: BigDecimal, huquqAmount: BigDecimal) {
+case class Transaction(id: Long, source: Option[Long], target: Option[Long], amount: BigDecimal, exempt: BigDecimal)
+case class TransactionBody(source: Option[Long], target: Option[Long], amount: BigDecimal, exempt: BigDecimal) {
 
-  def row(id: Long = 0)(implicit session: Session) = Tables.TransactionRow(id, session.user.id, source, target, amount, huquqAmount)
+  def row(id: Long = 0)(implicit session: Session) = Tables.TransactionRow(id, session.user.id, source, target, amount, exempt)
 
 }
 
