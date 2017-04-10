@@ -13,11 +13,13 @@ object SessionResource extends CustomDirectives with JsonSupport {
           complete(Session.login(credentials))
         }
       } ~
-      authenticateToken { implicit session =>
-        get {
+      get {
+        authenticateToken { implicit session =>
           complete(session)
-        } ~
-        delete {
+        }
+      } ~
+      delete {
+        authenticateToken { implicit session =>
           complete(Session.logout.map(_ => StatusCodes.NoContent))
         }
       }
