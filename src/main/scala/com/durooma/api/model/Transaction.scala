@@ -1,5 +1,7 @@
 package com.durooma.api.model
 
+import java.sql.{Date, Timestamp}
+
 import com.durooma.db.Tables.profile.api._
 import com.durooma.db.Tables
 import DB._
@@ -7,10 +9,25 @@ import DB._
 /**
   * Created by hannes on 18/03/2017.
   */
-case class Transaction(id: Long, source: Option[Long], target: Option[Long], amount: BigDecimal, exempt: BigDecimal)
-case class TransactionBody(source: Option[Long], target: Option[Long], amount: BigDecimal, exempt: BigDecimal) {
+case class Transaction(
+  id: Long,
+  date: Date,
+  source: Option[Long],
+  target: Option[Long],
+  amount: BigDecimal,
+  exempt: BigDecimal,
+  description: Option[String]
+)
 
-  def row(id: Long = 0)(implicit session: Session) = Tables.TransactionRow(id, session.user.id, source, target, amount, exempt)
+case class TransactionBody(
+  date: Date,
+  source: Option[Long],
+  target: Option[Long],
+  amount: BigDecimal,
+  exempt: BigDecimal,
+  description: Option[String]) {
+
+  def row(id: Long = 0)(implicit session: Session) = Tables.TransactionRow(id, date, session.user.id, source, target, amount, exempt, description)
 
 }
 
@@ -18,7 +35,7 @@ object Transaction {
 
   val fromTuple = (Transaction.apply _).tupled(_)
 
-  def map(q: Query[Tables.Transaction, Tables.Transaction#TableElementType, Seq]) = q.map(t => (t.id, t.source, t.target, t.amount, t.exempt))
+  def map(q: Query[Tables.Transaction, Tables.Transaction#TableElementType, Seq]) = q.map(t => (t.id, t.date, t.source, t.target, t.amount, t.exempt, t.description))
 
   def run(q: Query[Tables.Transaction, Tables.Transaction#TableElementType, Seq]) = {
     db.run(map(q).result).map(_.map(fromTuple))
@@ -51,7 +68,7 @@ object Transaction {
   }
 
   def create(transaction: TransactionBody)(implicit session: Session) = {
-    db.run((Tables.Transaction returning Tables.Transaction.map(_.id) into { (t, id) => Transaction(id, t.source, t.target, t.amount, t.exempt) }) += transaction.row())
+    db.run((Tables.Transaction returning Tables.Transaction.map(_.id) into { (t, id) => Transaction(id, t.date, t.source, t.target, t.amount, t.exempt, t.description) }) += transaction.row())
   }
 
   def update(id: Long, transaction: TransactionBody)(implicit session: Session) = {
