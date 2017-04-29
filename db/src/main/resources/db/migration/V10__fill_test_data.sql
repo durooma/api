@@ -6,11 +6,22 @@ insert into `account`(id, `owner`, `name`, initial_balance) values
   (1, 1, 'Raiffeisen', 458.53),
   (2, 1, 'Cash', 42.12);
 
-insert into `transaction`(`date`, `owner`, `source`, target, amount, exempt, description) VALUES
-  ('2017-04-03', 1, 1, null, 45.46, 0, 'Essen'),
-  ('2017-04-05', 1, 2, null, 5.99, 0, 'Frühstück'),
-  ('2017-04-06', 1, null, 1, 2999.00, 0, 'Lohn März 2017'),
-  ('2017-04-10', 1, 1, 2, 90.00, 0, 'Bankomatabhebung');
+insert into `transaction`(id, `date`, `owner`, `source`, target, amount, exempt, description) VALUES
+  (1, '2017-04-03', 1, 1, null, 45.46, 0, 'Essen'),
+  (2, '2017-04-05', 1, 2, null, 5.99, 0, 'Frühstück'),
+  (3, '2017-04-06', 1, null, 1, 2999.00, 0, 'Lohn März 2017'),
+  (4, '2017-04-10', 1, 1, 2, 90.00, 0, 'Bankomatabhebung');
+
+insert into label(id, `owner`, `name`) values
+  (1, null, 'Food'),
+  (2, null, 'Electronics'),
+  (3, null, 'Accommodation'),
+  (4, 1, 'Groceries');
+
+insert into transaction_label(transaction_id, label_id) values
+  (1, 1),
+  (1, 4),
+  (2, 1);
 
 insert into session(user_id, token, expires_at) values
   (1, 'fVYp4+MQ5HT5TPSLzCFDIK+9QgR87uRlnmHCEcuqFB+FNg59PeHLIXLn/E84TMdDp9LSzVtTYHAUY1gfqanw5Q==', now() + interval 10 year),
